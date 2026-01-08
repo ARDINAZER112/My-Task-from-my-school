@@ -1,0 +1,5 @@
+a, b = 1, 2
+print(a, end="")
+while b <= 21:
+    print(f",{b}", end="")
+    a, b = b, a + b
