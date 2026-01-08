@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kalkulator Sederhana</title>
+  <style>
+    body { font-family: system-ui, Arial; display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#f5f7fb; }
+    .card { background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.08);width:320px; }
+    h1 { font-size:18px;margin:0 0 12px 0;text-align:center; }
+    .row { display:flex;gap:8px;margin-bottom:10px; }
+    input[type="number"] { flex:1;padding:10px;border:1px solid #d7dbe6;border-radius:6px;font-size:15px; }
+    button.op { flex:1;padding:10px;background:#0b72ff;color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer; }
+    button.op.secondary { background:#6c757d; }
+    .result { margin-top:12px;padding:10px;border-radius:6px;background:#f1f5ff;border:1px solid #e2e8ff;text-align:center;font-weight:600; }
+    .note { font-size:12px;color:#666;margin-top:8px;text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Kalkulator: +, -, ×, ÷, %</h1>
+
+    <div class="row">
+      <input id="a" type="number" step="any" placeholder="Angka pertama" />
+      <input id="b" type="number" step="any" placeholder="Angka kedua" />
+    </div>
+
+    <div class="row">
+      <button class="op" data-op="add">+</button>
+      <button class="op" data-op="sub">−</button>
+      <button class="op" data-op="mul">×</button>
+    </div>
+    <div class="row">
+      <button class="op" data-op="div">÷</button>
+      <button class="op secondary" data-op="mod">%</button>
+    </div>
+
+    <div id="result" class="result">Hasil: —</div>
+    <div class="note">Masukkan angka lalu tekan operasi. Modulus = sisa bagi.</div>
+  </div>
+
+  <script>
+    const aEl = document.getElementById('a');
+    const bEl = document.getElementById('b');
+    const resultEl = document.getElementById('result');
+
+    function parseInputs() {
+      const a = aEl.value === '' ? NaN : Number(aEl.value);
+      const b = bEl.value === '' ? NaN : Number(bEl.value);
+      return { a, b };
+    }
+
+    function show(text) {
+      resultEl.textContent = 'Hasil: ' + text;
+    }
+
+    function compute(op) {
+      const { a, b } = parseInputs();
+      if (!isFinite(a) || !isFinite(b)) { show('Masukkan kedua angka'); return; }
+
+      switch (op) {
+        case 'add': show(a + b); break;
+        case 'sub': show(a - b); break;
+        case 'mul': show(a * b); break;
+        case 'div':
+          if (b === 0) show('Error: tidak boleh dibagi 0');
+          else show(a / b);
+          break;
+        case 'mod':
+          if (b === 0) show('Error: modulus dengan 0');
+          else show(a % b);
+          break;
+      }
+    }
+
+    document.querySelectorAll('button.op').forEach(btn => {
+      btn.addEventListener('click', () => compute(btn.dataset.op));
+    });
+
+    // Enter pada input kedua akan menghitung penjumlahan secara default
+    bEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') compute('add');
+    });
+  </script>
+</body>
+</html></div>
